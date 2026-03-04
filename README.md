@@ -11,15 +11,15 @@ The framework layer sits between the low-level `core-services` (daemons like `sy
 ## 📦 The Frameworks
 
 ### GNUCore
-**The Vendor Layer.**
-GNUCore acts as the bridge to the Linux world. It collects and re-exports essential GNU/Linux libraries needed by other frameworks, ensuring binary stability across the system.
+**The Vendor & Utility Layer.** GNUCore acts as the essential bridge to the Linux ecosystem. It encapsulates the core libraries and binary utilities required for hardware interaction and system maintenance, ensuring that the base system remains clean while providing the "heavy lifting" power of classic Linux tools.
+
 * **Bundle Name:** `GNUCore.frameworkb`
 * **Included Libraries:**
     * **Hardware & System:** `libudev.so`, `libkmod.so`, `libblkid.so`, `libuuid.so`
     * **Graphics & Display:** `libdrm.so`, `libwayland-client.so`, `libwayland-server.so`, `libgbm.so`, `libpixman-1.so`, `libEGL.so`, `libGLESv2.so`
     * **Audio & Input:** `libasound.so`, `libinput.so`, `libxkbcommon.so`
     * **Utility:** `libffi.so`, `libexpat.so`, `libz.so`
-* **Internal Helpers (CLI Tools):** These binaries are stored within `Contents/Helpers/` and are isolated from the global `$PATH`. They are invoked via `libfinch` for system tasks:
+* **Internal Helpers (CLI Tools):** These binaries are stored within `Helpers/` and are isolated from the global `$PATH`. They are invoked via `libfinch` for system tasks:
     * **Disk & Partitioning:** `sgdisk`, `growpart`, `fdisk`, `lsblk`, `wipefs`
     * **Filesystem Management:** `e2fsck`, `resize2fs`, `tune2fs`, `mkfs.ext4`, `mkfs.vfat`, `dosfsck`
     * **Kernel & Hardware:** `kmod` (modprobe/insmod), `udevadm`, `hwclock`
