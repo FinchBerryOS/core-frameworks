@@ -1,4 +1,5 @@
 # FinchBerryOS Frameworks
+[English](README.md) | [Deutsch](README.de.md)
 
 This repository contains the high-level C-based frameworks for **FinchBerryOS**. These frameworks provide the primary APIs for applications (`.appd`) and system services (`.serviced`), abstracting the underlying Linux kernel and core daemons into a clean, macOS-inspired interface.
 
