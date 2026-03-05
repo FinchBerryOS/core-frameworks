@@ -12,73 +12,65 @@ The framework layer sits between the low-level `core-services` (daemons like `sy
 ## 📦 The Frameworks
 
 #### GNUCore
-**The Headless Foundation.** GNUCore acts as the essential bridge to the Linux ecosystem, forming the system's minimal "survival capsule." It contains the core libraries and binaries strictly required for the boot process, network management (via NetKit), and the hardware registry (via IOKit/kmodsysd). A system equipped only with this framework operates as a sovereign headless server.
-
+**The Headless Foundation.** Acts as the essential bridge to the Linux ecosystem. It contains core libraries for the boot process, network management, and hardware registry.
 * **Bundle Name:** `GNUCore.frameworkb`
-* **Included Libraries:**
-    * **Core Runtime:** `libc.so`, `libm.so`, `libdl.so`, `libpthread.so`
-    * **Hardware & System:** `libudev.so`, `libkmod.so`, `libblkid.so`, `libuuid.so`
-    * **Security & Utility:** `libssl.so`, `libcrypto.so`, `libz.so`, `libexpat.so`, `libffi.so`
-* **Internal Helpers (CLI Tools):** These binaries are stored within `Helpers/` and are isolated from the global `$PATH`. They are invoked via `libfinch` or system daemons for low-level tasks:
-    * **Disk & Partitioning:** `sgdisk`, `growpart`, `fdisk`, `lsblk`, `wipefs`
-    * **Filesystem Management:** `e2fsck`, `resize2fs`, `tune2fs`, `mkfs.ext4`, `mkfs.vfat`, `dosfsck`
-    * **Kernel & Hardware:** `kmod` (modprobe/insmod), `udevadm`, `hwclock`
+* **Libraries:** `libc`, `libudev`, `libkmod`, `libssl`, `libz`, etc.
 
 #### GNUCoreExtensions
-**The Multimedia & Interaction Layer.** This framework builds directly upon `GNUCore` and extends the system with graphics, audio, and input capabilities. It is required as soon as a graphical user interface (WindowServer/CoreGraphics) or media output is active. This separation ensures that the attack surface on headless systems remains minimal.
-
+**The Multimedia Layer.** Extends `GNUCore` with graphics, audio, and input capabilities. Required for GUIs.
 * **Bundle Name:** `GNUCoreExtensions.frameworkb`
-* **Dependency:** Requires `GNUCore.frameworkb` to be installed.
-* **Included Libraries:**
-    * **Graphics & Display:** `libdrm.so`, `libwayland-client.so`, `libwayland-server.so`, `libgbm.so`, `libpixman-1.so`, `libEGL.so`, `libGLESv2.so`
-    * **Audio & Input:** `libasound.so`, `libinput.so`, `libxkbcommon.so`
+* **Dependency:** Requires `GNUCore.frameworkb`.
+
+### Foundation
+**The Logical Base.** Centralizes system state and configuration. It is the "Single Source of Truth" for hostnames, service settings, and global parameters.
+* **Bundle Name:** `Foundation.frameworkb`
+* **Functionality:** System registry access, key-value configuration, service state management.
+* **Backend:** Interfaces with `configd`.
+
+### StorageKit
+**Volume Management.** Abstrahierst physical drives into logical units. Manages mount points, partition tables, and the integrity of A/B system images.
+* **Bundle Name:** `StorageKit.frameworkb`
+* **Functionality:** Mounting/Unmounting, partitioning, filesystem integrity (fsck).
+* **Backend:** Utilizes `GNUCore` helpers (fdisk, mkfs).
+
+### SecurityKit
+**Identity & Encryption.** Manages cryptographic secrets and identities.
+* **Bundle Name:** `SecurityKit.frameworkb`
+* **Functionality:** System-wide Keychain, SSL/TLS certificate management, TPM interface.
+* **Backend:** Interfaces with `securityd`.
+
+### IdentityKit
+**User Identity & Authentication.**
+Manages system access, user profiles, and permission levels. It serves as the central authority for the login process and session management.
+* **Bundle Name:** `IdentityKit.frameworkb`
+* **Functionality:** User login (authentication), management of user groups, namespace assignment, and session control.
+* **Backend:** Interfaces with `identityd` and `authd`.
 
 ### IOKit
-**The Hardware Registry.**
-Inspired by Darwin’s I/O Kit, this framework provides an object-oriented view of the system's hardware.
+**The Hardware Registry.** Provides an object-oriented view of the system's hardware.
 * **Bundle Name:** `IOKit.frameworkb`
-* **Functionality:** Accessing the I/O Registry, matching devices (USB, PCI), and managing power states.
 * **Backend:** Communicates via XPC with `kmodsysd`.
 
 ### CoreSystem
-**The OS Foundation.**
-Provides core primitives and essential system utilities used by almost every binary.
+**The OS Foundation.** Provides core primitives used by almost every binary.
 * **Bundle Name:** `CoreSystem.frameworkb`
-* **Functionality:** Unified Logging (`cs_log`), memory management helpers, and system-wide notification observers.
-* **Backend:** Interfaces with `logd` and `configd`.
-
-### Collaboration
-**Inter-App Data Exchange.**
-Handles data sharing and user identity management between applications.
-* **Bundle Name:** `Collaboration.frameworkb`
-* **Functionality:** Global pasteboard (clipboard), "Share Sheet" logic, and cross-application collaboration tools.
-* **Backend:** Works in tandem with the `sharingd` daemon.
+* **Functionality:** Unified Logging (`cs_log`), memory helpers, notifications.
 
 ### NetKit
-**Networking & Decentralization.**
-A high-performance networking stack providing a unified API for standard, advanced, and sovereign connectivity.
+**Networking & Decentralization.** High-performance stack for standard and sovereign connectivity (WireGuard, Bitcoin P2P, HTTP/3).
 * **Bundle Name:** `NetKit.frameworkb`
-* **Supported Protocols & Features:**
-    * **Standard Stack:** IPv4, IPv6, TCP, UDP, **QUIC**, ICMP.
-    * **HTTP Services:** High-level **HTTP Client API** with native support for HTTP/1.1, HTTP/2, and **HTTP/3 (via QUIC)**.
-    * **DNS Services:** High-level **Client DNS API** (Stub Resolver) for A, AAAA, SRV, and TXT queries. Supports modern encrypted standards (DoH/DoT).
-    * **WireGuard API:** Control Plane API to configure and manage native Linux Kernel WireGuard interfaces.
-    * **Decentralized (Sovereignty):** Native support for the **Bitcoin P2P protocol** (Handshakes, Peer Discovery, Merkle-Block-Filtering).
-    * **Service Discovery:** mDNS (Bonjour-compatible) and DNS-SD.
-* **Backend:** Interfaces with `networkd` (connectivity), `configd` (state), and **`dnsd`** (the central recursive/caching resolver service).
 
 ### CoreGraphics
-**The Rendering Engine.**
-The primary 2D drawing API for FinchBerryOS.
+**The Rendering Engine.** Primary 2D drawing API for FinchBerryOS.
 * **Bundle Name:** `CoreGraphics.frameworkb`
-* **Functionality:** Path-based drawing, anti-aliased text rendering, and affine transformations.
-* **Backend:** Uses `libdrm` and `pixman` (via GNUCore) to render into shared memory buffers managed by the WindowServer.
+
+### Collaboration
+**Data Exchange.** Handles data sharing and user identity management (Pasteboard, Share Sheets).
+* **Bundle Name:** `Collaboration.frameworkb`
 
 ---
 
 ## 📁 Framework Bundle Structure (.frameworkb)
-
-Each framework follows a strict structure to support versioning and modularity:
 
 ```text
 Name.frameworkb/
