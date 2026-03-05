@@ -58,6 +58,18 @@ Manages system access, user profiles, and permission levels. It serves as the ce
 * **Functionality:** User login (authentication), management of user groups, namespace assignment, and session control.
 * **Backend:** Interfaces with `identityd` and `authd`.
 
+### ContainerKit
+**Process Isolation & Resource Management.**
+ContainerKit is the primary framework for creating and managing isolated execution environments. It abstracts the complexity of Linux namespaces and control groups (cgroups) to securely separate processes, filesystems, and network stacks from each other and the host system.
+
+* **Bundle Name:** `ContainerKit.frameworkb`
+* **Key Features:**
+    * **Namespace Abstraction:** Simplified creation of isolated environments for mounts, process IDs (PID), networks, and user IDs (User).
+    * **Resource Quotas:** Precise control over CPU cycles, memory limits, and I/O priorities via cgroups.
+    * **Filesystem Jailing:** Integration of overlay mounts and read-only layers for volatile or protected container environments.
+    * **Network Virtualization:** Creation of virtual interfaces (veth) for isolated network stacks within a container.
+* **Backend:** Interfaces via LXPC with `syscored` to handle kernel-level configuration for isolated process contexts.
+
 ### IOKit
 **The Hardware Registry.**
 Inspired by Darwin’s I/O Kit, this framework provides an object-oriented, hierarchical view of the system's hardware. It abstracts the complexity of kernel events and driver states into a stable API for applications and system services.
@@ -88,13 +100,13 @@ A high-performance networking stack providing a unified API for standard communi
 
 * **Bundle Name:** `NetKit.frameworkb`
 * **Key Features:**
-    * **Modern IP Stack:** Full abstraction of IPv4/IPv6 addressing, TCP/UDP streams, and native support for **QUIC** (UDP-based).
-    * **High-Level HTTP Engine:** Native support for **HTTP/1.1, HTTP/2, and HTTP/3**. Includes an intelligent connection pooler and automatic response caching.
-    * **Sovereign Connectivity:** Native integration of the **Bitcoin P2P protocol**. Enables handshakes, peer discovery, and Merkle block filtering directly at the framework level (SPV-ready).
-    * **Secure VPN (WireGuard):** A dedicated API to control and monitor native Linux kernel WireGuard interfaces (key exchange, peer management).
-    * **DNS Ecosystem:** Integrated stub resolver with support for **DNS-over-HTTPS (DoH)** and **DNS-over-TLS (DoT)** to bypass censorship and tracking.
-    * **Service Discovery:** Native implementation of **mDNS (Bonjour)** and DNS-SD for automatic device and service discovery in local networks.
-* **Backend:** Interfaces via XPC with `networkd` (connectivity), `dnsd` (caching/privacy), and directly with the Linux kernel for WireGuard operations.
+    * **Modern IP Stack:** Abstraction of IPv4/IPv6, TCP/UDP streams, and native support for **QUIC** (UDP-based).
+    * **High-Level HTTP Engine:** Native support for **HTTP/1.1, HTTP/2, and HTTP/3** (via QUIC).
+    * **P2P Foundations (Bitcoin):** Native implementation of the Bitcoin network protocol for **broadcasting and receiving blocks and transactions**. Enables handshakes and peer discovery at the framework level.
+    * **Secure VPN (WireGuard):** API to control and monitor native Linux kernel WireGuard interfaces (key exchange, peer management).
+    * **DNS Ecosystem:** Integrated stub resolver with support for **DNS-over-HTTPS (DoH)** and **DNS-over-TLS (DoT)**.
+    * **Service Discovery:** Native implementation of **mDNS (Bonjour)** and DNS-SD.
+* **Backend:** Interfaces via LXPC with `networkd` (connectivity) and `dnsd` (privacy/caching).
 
 ### CoreGraphics
 **The Rendering Engine.** Primary 2D drawing API for FinchBerryOS.
