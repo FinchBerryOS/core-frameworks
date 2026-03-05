@@ -11,23 +11,23 @@ The framework layer sits between the low-level `core-services` (daemons like `sy
 ## 📦 The Frameworks
 
 #### GNUCore
-**The Headless Foundation.** GNUCore fungiert als essentielle Brücke zum Linux-Ökosystem und bildet die minimale "Überlebenskapsel". Sie enthält die Kern-Bibliotheken und Binaries, die für den Boot-Vorgang, das Netzwerk-Management und die Hardware-Registry (via IOKit/kmodsysd) zwingend erforderlich sind. Ein System mit nur diesem Framework operiert als souveräner Headless-Server.
+**The Headless Foundation.** GNUCore acts as the essential bridge to the Linux ecosystem, forming the system's minimal "survival capsule." It contains the core libraries and binaries strictly required for the boot process, network management (via NetKit), and the hardware registry (via IOKit/kmodsysd). A system equipped only with this framework operates as a sovereign headless server.
 
 * **Bundle Name:** `GNUCore.frameworkb`
 * **Included Libraries:**
     * **Core Runtime:** `libc.so`, `libm.so`, `libdl.so`, `libpthread.so`
     * **Hardware & System:** `libudev.so`, `libkmod.so`, `libblkid.so`, `libuuid.so`
     * **Security & Utility:** `libssl.so`, `libcrypto.so`, `libz.so`, `libexpat.so`, `libffi.so`
-* **Internal Helpers (CLI Tools):** Diese Binaries sind innerhalb von `Helpers/` gespeichert und vom globalen `$PATH` isoliert. Sie werden über `libfinch` oder System-Daemons aufgerufen:
+* **Internal Helpers (CLI Tools):** These binaries are stored within `Helpers/` and are isolated from the global `$PATH`. They are invoked via `libfinch` or system daemons for low-level tasks:
     * **Disk & Partitioning:** `sgdisk`, `growpart`, `fdisk`, `lsblk`, `wipefs`
     * **Filesystem Management:** `e2fsck`, `resize2fs`, `tune2fs`, `mkfs.ext4`, `mkfs.vfat`, `dosfsck`
     * **Kernel & Hardware:** `kmod` (modprobe/insmod), `udevadm`, `hwclock`
 
 #### GNUCoreExtensions
-**The Multimedia & Interaction Layer.** Dieses Framework baut direkt auf der `GNUCore` auf und erweitert das System um Grafik-, Audio- und Input-Fähigkeiten. Es wird benötigt, sobald eine grafische Benutzeroberfläche (WindowServer/CoreGraphics) oder Medien-Ausgabe aktiv ist. Durch die Trennung bleibt die Angriffsfläche auf Headless-Systemen minimal.
+**The Multimedia & Interaction Layer.** This framework builds directly upon `GNUCore` and extends the system with graphics, audio, and input capabilities. It is required as soon as a graphical user interface (WindowServer/CoreGraphics) or media output is active. This separation ensures that the attack surface on headless systems remains minimal.
 
 * **Bundle Name:** `GNUCoreExtensions.frameworkb`
-* **Dependency:** Erfordert ein installiertes `GNUCore.frameworkb`.
+* **Dependency:** Requires `GNUCore.frameworkb` to be installed.
 * **Included Libraries:**
     * **Graphics & Display:** `libdrm.so`, `libwayland-client.so`, `libwayland-server.so`, `libgbm.so`, `libpixman-1.so`, `libEGL.so`, `libGLESv2.so`
     * **Audio & Input:** `libasound.so`, `libinput.so`, `libxkbcommon.so`
