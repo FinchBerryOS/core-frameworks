@@ -59,9 +59,16 @@ Manages system access, user profiles, and permission levels. It serves as the ce
 * **Backend:** Interfaces with `identityd` and `authd`.
 
 ### IOKit
-**The Hardware Registry.** Provides an object-oriented view of the system's hardware.
+**The Hardware Registry.**
+Inspired by Darwin’s I/O Kit, this framework provides an object-oriented, hierarchical view of the system's hardware. It abstracts the complexity of kernel events and driver states into a stable API for applications and system services.
+
 * **Bundle Name:** `IOKit.frameworkb`
-* **Backend:** Communicates via XPC with `kmodsysd`.
+* **Key Functionalities:**
+    * **I/O Registry:** A dynamic tree structure of all detected hardware components (CPU, PCI, USB, NVMe). Enables precise device matching via classes and properties.
+    * **Hardware Events:** An asynchronous notification system for hot-plugging events (e.g., "Monitor connected," "USB drive removed").
+    * **Power Management:** Centralized control of power states (Sleep, Wake, Idle) for individual hardware groups.
+    * **Property Tables:** Direct access to hardware metadata such as serial numbers, revisions, and supported features (e.g., display resolutions via EDID).
+* **Backend:** Interfaces via XPC with the hardware daemon `kmodsysd` and utilizes `libudev` (via GNUCore) to monitor kernel states.
 
 ### CoreSystem
 **The OS Foundation.**
@@ -76,8 +83,18 @@ CoreSystem defines the fundamental programming models and primitive data types f
 * **Backend:** Interfaces with `logd` for persistent log storage and `syscored` for process metrics and health monitoring.
 
 ### NetKit
-**Networking & Decentralization.** High-performance stack for standard and sovereign connectivity (WireGuard, Bitcoin P2P, HTTP/3).
+**Networking & Decentralization.**
+A high-performance networking stack providing a unified API for standard communication and sovereign, decentralized connectivity. NetKit abstracts the complexity of the Linux kernel into an object-oriented interface for modern web and P2P protocols.
+
 * **Bundle Name:** `NetKit.frameworkb`
+* **Key Features:**
+    * **Modern IP Stack:** Full abstraction of IPv4/IPv6 addressing, TCP/UDP streams, and native support for **QUIC** (UDP-based).
+    * **High-Level HTTP Engine:** Native support for **HTTP/1.1, HTTP/2, and HTTP/3**. Includes an intelligent connection pooler and automatic response caching.
+    * **Sovereign Connectivity:** Native integration of the **Bitcoin P2P protocol**. Enables handshakes, peer discovery, and Merkle block filtering directly at the framework level (SPV-ready).
+    * **Secure VPN (WireGuard):** A dedicated API to control and monitor native Linux kernel WireGuard interfaces (key exchange, peer management).
+    * **DNS Ecosystem:** Integrated stub resolver with support for **DNS-over-HTTPS (DoH)** and **DNS-over-TLS (DoT)** to bypass censorship and tracking.
+    * **Service Discovery:** Native implementation of **mDNS (Bonjour)** and DNS-SD for automatic device and service discovery in local networks.
+* **Backend:** Interfaces via XPC with `networkd` (connectivity), `dnsd` (caching/privacy), and directly with the Linux kernel for WireGuard operations.
 
 ### CoreGraphics
 **The Rendering Engine.** Primary 2D drawing API for FinchBerryOS.
