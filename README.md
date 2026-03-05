@@ -64,9 +64,16 @@ Manages system access, user profiles, and permission levels. It serves as the ce
 * **Backend:** Communicates via XPC with `kmodsysd`.
 
 ### CoreSystem
-**The OS Foundation.** Provides core primitives used by almost every binary.
+**The OS Foundation.**
+CoreSystem defines the fundamental programming models and primitive data types for FinchBerryOS. It acts as the bridge between the raw C world of `GNUCore` and the higher-level object-oriented framework architecture. Every binary in the system links against CoreSystem to ensure consistent behavior across the OS.
+
 * **Bundle Name:** `CoreSystem.frameworkb`
-* **Functionality:** Unified Logging (`cs_log`), memory helpers, notifications.
+* **Key Functionalities:**
+    * **Unified Logging:** `cs_log` provides a high-performance, structured logging system with granular log levels (Fault, Error, Info, Debug).
+    * **Object Lifecycle:** Implements reference counting and memory management primitives for framework objects.
+    * **Notification Center:** A system-wide observer pattern for inter-process events and state changes.
+    * **Dispatch Queues:** High-level abstractions for asynchronous threading and task management.
+* **Backend:** Interfaces with `logd` for persistent log storage and `syscored` for process metrics and health monitoring.
 
 ### NetKit
 **Networking & Decentralization.** High-performance stack for standard and sovereign connectivity (WireGuard, Bitcoin P2P, HTTP/3).
