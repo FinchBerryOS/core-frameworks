@@ -12,14 +12,26 @@ Die Framework-Schicht sitzt zwischen den Low-Level `core-services` (Daemons wie 
 ## 📦 Die Frameworks
 
 #### GNUCore
-**Die Headless-Basis.** Fungiert als essentielle Brücke zum Linux-Ökosystem. Sie enthält Kern-Bibliotheken für den Boot-Vorgang, Netzwerk-Management und die Hardware-Registry.
+**Die Headless-Basis.** GNUCore fungiert als essentielle Brücke zum Linux-Ökosystem und bildet die minimale "Überlebenskapsel" des Systems. Sie enthält die Kern-Bibliotheken und Binaries, die für den Boot-Vorgang, das Netzwerk-Management (via NetKit) und die Hardware-Registry (via IOKit/kmodsysd) zwingend erforderlich sind. Ein System mit nur diesem Framework operiert als souveräner Headless-Server.
+
 * **Bundle-Name:** `GNUCore.frameworkb`
-* **Libraries:** `libc`, `libudev`, `libkmod`, `libssl`, `libz`, etc.
+* **Enthaltene Bibliotheken:**
+    * **Core Runtime:** `libc.so`, `libm.so`, `libdl.so`, `libpthread.so`
+    * **Hardware & System:** `libudev.so`, `libkmod.so`, `libblkid.so`, `libuuid.so`
+    * **Sicherheit & Utilities:** `libssl.so`, `libcrypto.so`, `libz.so`, `libexpat.so`, `libffi.so`
+* **Interne Helfer (CLI-Tools):** Diese Binaries werden in `Helpers/` gespeichert und sind vom globalen `$PATH` isoliert. Sie werden über `libfinch` oder System-Daemons aufgerufen:
+    * **Disk & Partitionierung:** `sgdisk`, `growpart`, `fdisk`, `lsblk`, `wipefs`
+    * **Dateisystem-Verwaltung:** `e2fsck`, `resize2fs`, `tune2fs`, `mkfs.ext4`, `mkfs.vfat`, `dosfsck`
+    * **Kernel & Hardware:** `kmod` (modprobe/insmod), `udevadm`, `hwclock`
 
 #### GNUCoreExtensions
-**Der Multimedia-Layer.** Erweitert `GNUCore` um Grafik-, Audio- und Eingabefähigkeiten. Erforderlich für GUIs.
+**Der Multimedia & Interaktions-Layer.** Dieses Framework baut direkt auf `GNUCore` auf und erweitert das System um Grafik-, Audio- und Eingabefähigkeiten. Es wird benötigt, sobald eine grafische Benutzeroberfläche (WindowServer/CoreGraphics) oder eine Medienausgabe aktiv ist. Diese Trennung stellt sicher, dass die Angriffsfläche auf Headless-Systemen minimal bleibt.
+
 * **Bundle-Name:** `GNUCoreExtensions.frameworkb`
-* **Abhängigkeit:** Erfordert `GNUCore.frameworkb`.
+* **Abhängigkeit:** Erfordert ein installiertes `GNUCore.frameworkb`.
+* **Enthaltene Bibliotheken:**
+    * **Grafik & Display:** `libdrm.so`, `libwayland-client.so`, `libwayland-server.so`, `libgbm.so`, `libpixman-1.so`, `libEGL.so`, `libGLESv2.so`
+    * **Audio & Eingabe:** `libasound.so`, `libinput.so`, `libxkbcommon.so`
 
 ### Foundation
 **Das logische Fundament.** Zentralisiert den Systemstatus und die Konfiguration. Es ist die "Single Source of Truth" für Hostnamen, Dienst-Einstellungen und globale Parameter.
