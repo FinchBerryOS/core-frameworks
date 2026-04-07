@@ -1,5 +1,4 @@
 # FinchBerryOS Frameworks
-[English](README.md) | [Deutsch](README.de.md)
 <p align="center">
   <img src="https://raw.githubusercontent.com/FinchBerryOS/.github/refs/heads/main/profile/assets/Frameworks_github.png" alt="FinchBerryOS Logo" width="400">
 </p>
@@ -35,9 +34,9 @@ The framework layer sits between the low-level `core-services` (daemons like `sy
     * **Graphics & Display:** `libdrm.so`, `libwayland-client.so`, `libwayland-server.so`, `libgbm.so`, `libpixman-1.so`, `libEGL.so`, `libGLESv2.so`
     * **Audio & Input:** `libasound.so`, `libinput.so`, `libxkbcommon.so`
 
-### Foundation
+### ConfigKit
 **The Logical Base.** Centralizes system state and configuration. It is the "Single Source of Truth" for hostnames, service settings, and global parameters.
-* **Bundle Name:** `Foundation.frameworkb`
+* **Bundle Name:** `ConfigKit.frameworkb`
 * **Functionality:** System registry access, key-value configuration, service state management.
 * **Backend:** Interfaces with `configd`.
 
@@ -94,6 +93,10 @@ CoreSystem defines the fundamental programming models and primitive data types f
     * **Object Lifecycle:** Implements reference counting and memory management primitives for framework objects.
     * **Notification Center:** A system-wide observer pattern for inter-process events and state changes.
     * **Dispatch Queues:** High-level abstractions for asynchronous threading and task management.
+    * **Bundle Model:** Canonical runtime representation of `.appb`, `.frameworkb`, and `.pluginb` bundles.
+    * **Resource Resolution:** Lookup of bundle-local resources, manifests, embedded frameworks, and helper binaries.
+    * **Code Location:** Resolution of primary binaries, framework entry points, and plugin executables.
+    * **Helper Integration:** Discovery and controlled invocation of bundle-local helpers.
 * **Backend:** Interfaces with `logd` for persistent log storage and `syscored` for process metrics and health monitoring.
 
 ### NetKit
