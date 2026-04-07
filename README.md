@@ -19,7 +19,6 @@ The framework layer sits between the low-level `core-services` (daemons like `sy
 
 * **Bundle Name:** `GNUCore.frameworkb`
 * **Included Libraries:**
-    * **Core Runtime:** `libc.so`, `libm.so`, `libdl.so`, `libpthread.so`
     * **Hardware & System:** `libudev.so`, `libkmod.so`, `libblkid.so`, `libuuid.so`
     * **Security & Utility:** `libssl.so`, `libcrypto.so`, `libz.so`, `libexpat.so`, `libffi.so`
 * **Internal Helpers (CLI Tools):** These binaries are stored within `Helpers/` and are isolated from the global `$PATH`. They are invoked via `libfinch` or system daemons for low-level tasks:

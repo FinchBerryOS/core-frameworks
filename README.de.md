@@ -16,7 +16,6 @@ Die Framework-Schicht sitzt zwischen den Low-Level `core-services` (Daemons wie 
 
 * **Bundle-Name:** `GNUCore.frameworkb`
 * **Enthaltene Bibliotheken:**
-    * **Core Runtime:** `libc.so`, `libm.so`, `libdl.so`, `libpthread.so`
     * **Hardware & System:** `libudev.so`, `libkmod.so`, `libblkid.so`, `libuuid.so`
     * **Sicherheit & Utilities:** `libssl.so`, `libcrypto.so`, `libz.so`, `libexpat.so`, `libffi.so`
 * **Interne Helfer (CLI-Tools):** Diese Binaries werden in `Helpers/` gespeichert und sind vom globalen `$PATH` isoliert. Sie werden über `libfinch` oder System-Daemons aufgerufen:
