@@ -107,11 +107,46 @@ A high-performance networking stack providing a unified API for standard communi
 * **Key Features:**
     * **Modern IP Stack:** Abstraction of IPv4/IPv6, TCP/UDP streams, and native support for **QUIC** (UDP-based).
     * **High-Level HTTP Engine:** Native support for **HTTP/1.1, HTTP/2, and HTTP/3** (via QUIC).
-    * **P2P Foundations (Bitcoin):** Native implementation of the Bitcoin network protocol for **broadcasting and receiving blocks and transactions**. Enables handshakes and peer discovery at the framework level.
-    * **Secure VPN (WireGuard):** API to control and monitor native Linux kernel WireGuard interfaces (key exchange, peer management).
+    * **P2P Foundations (libp2p):** Native support for peer identities, secure channels, peer discovery, and multiplexed stream-based communication for decentralized protocols.
+    * **Unified VPN Platform:** Provides a backend-agnostic API for establishing and monitoring secure VPN tunnels using **WireGuard**, **OpenVPN**, or **IPsec**. Supports both **system-wide routing** and **isolated container-backed VPN contexts** with standardized proxy endpoints for application traffic.   
     * **DNS Ecosystem:** Integrated stub resolver with support for **DNS-over-HTTPS (DoH)** and **DNS-over-TLS (DoT)**.
     * **Service Discovery:** Native implementation of **mDNS (Bonjour)** and DNS-SD.
 * **Backend:** Interfaces via LXPC with `networkd` (connectivity) and `dnsd` (privacy/caching).
+
+### BitcoinEngine
+**Sovereign Bitcoin Node Engine.**
+Provides the native Bitcoin protocol and engine layer for FinchBerryOS. BitcoinEngine builds on NetKit’s transport and decentralized networking foundations to manage peer sessions, block and transaction exchange, and node synchronization.
+
+* **Bundle Name:** `BitcoinEngine.frameworkb`
+* **Key Features:**
+    * **Bitcoin P2P Protocol:** Native implementation of version handshakes, peer messaging, and inventory exchange.
+    * **Chain Synchronization:** Download and processing of headers, blocks, and transaction announcements.
+    * **Peer Management:** Maintains Bitcoin peer sessions and policy-aware connection behavior on top of NetKit.
+* **Backend:** Interfaces with `bitcoind` or a native FinchBerryOS Bitcoin service for validation, storage, and policy control.
+
+### PythonKit
+**Native Python Runtime Integration.**
+Provides the default FinchBerryOS system API bridge for Python. PythonKit exposes the system frameworks through a native Python interface and is loaded by the system Python runtime to provide first-class access to FinchBerryOS services.
+
+* **Bundle Name:** `PythonKit.frameworkb`
+* **Functionality:** Native Python bindings for `CoreSystem`, `ConfigKit`, `NetKit`, `StorageKit`, `SecurityKit`, `IdentityKit`, and `IOKit`.
+* **Backend:** Bridges the Python runtime to FinchBerryOS frameworks through the native C framework layer.
+
+### NodeKit
+**Native Node.js Runtime Integration.**
+Provides the default FinchBerryOS system API bridge for Node.js. NodeKit exposes the system frameworks through native Node.js modules and gives JavaScript applications direct access to FinchBerryOS services.
+
+* **Bundle Name:** `NodeKit.frameworkb`
+* **Functionality:** Native Node.js bindings for `CoreSystem`, `ConfigKit`, `NetKit`, `StorageKit`, `SecurityKit`, `IdentityKit`, and `IOKit`.
+* **Backend:** Bridges the Node.js runtime to FinchBerryOS frameworks through the native C framework layer.
+
+### JavaKit
+**Native JVM Runtime Integration.**
+Provides the default FinchBerryOS system API bridge for JVM languages. JavaKit exposes the system frameworks to Java and Kotlin applications through a native integration layer for first-class OS access.
+
+* **Bundle Name:** `JavaKit.frameworkb`
+* **Functionality:** Native JVM bindings for `CoreSystem`, `ConfigKit`, `NetKit`, `StorageKit`, `SecurityKit`, `IdentityKit`, and `IOKit`.
+* **Backend:** Bridges the JVM runtime to FinchBerryOS frameworks through the native C framework layer.
 
 ### CoreGraphics
 **The Rendering Engine.** Primary 2D drawing API for FinchBerryOS.
