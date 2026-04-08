@@ -45,7 +45,7 @@ The framework layer sits between the low-level `core-services` (daemons like `sy
 **Volume Management.** Abstrahierst physical drives into logical units. Manages mount points, partition tables, and the integrity of A/B system images.
 * **Bundle Name:** `StorageKit.frameworkb`
 * **Functionality:** Mounting/Unmounting, partitioning, filesystem integrity (fsck).
-* **Scope:** Focused on volumes and filesystems, not file-level operations (handled by libc/POSIX).
+* **Scope:** Focused on volumes and filesystems, not file-level operations (handled by `CoreSystem`, backed by GNUCore/POSIX).
 * **Backend:** Utilizes `GNUCore` helpers (fdisk, mkfs).
 
 ### SecurityKit
@@ -105,6 +105,7 @@ CoreSystem defines the fundamental programming models and primitive data types f
     * **Resource Resolution:** Lookup of bundle-local resources, manifests, embedded frameworks, and helper binaries.
     * **Code Location:** Resolution of primary binaries, framework entry points, and plugin executables.
     * **Helper Integration:** Discovery and controlled invocation of bundle-local helpers.
+    * **File & Stream Services:** Standardized access to files, directories, metadata, path resolution, and stream-based I/O across the system.
 * **Backend:** Interfaces with `logd` for persistent log storage and `syscored` for process metrics and health monitoring.
 
 ### NetKit
